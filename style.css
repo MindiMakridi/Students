@@ -1,0 +1,51 @@
+body{
+	font-family:Arial, Verdana, sans-serif; /* Семейство шрифтов */
+	font-size: 11pt; /* Размер основного шрифта в пунктах */
+	background-color: #f0f0f0;
+	color: #333; /*Цвет основного текста */
+}
+
+h1{
+	color: #a52a2a; /* цвет заголовка*/
+	font-size: 24pt;
+	font-family: Georgia, Times, serif;
+	font-weight: normal; /*нормальное начертание текста*/
+}
+p{
+	text-align: justify;
+	margin-left:  10px; /*отступ слева в пикселях*/
+	margin-right: 10px; /*отступ справа в пикселях*/
+  
+
+}
+h2{
+	
+	
+	float: left;
+	border-bottom: 1px solid #999;
+	border-top: 1px solid #999;
+	border-left: 1px solid #999;
+	border-right: 1px solid #999;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	
+
+
+}
+a.navigation{
+	text-decoration: none;
+
+}
+table{
+	border:1px inset black;
+
+	
+}
+th{
+	border:3px inset black;
+}
+td{
+	border:3px inset black;
+}
