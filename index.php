@@ -66,9 +66,10 @@ while($obj = $STH->fetch()){
 	echo "<tr><td>$obj->name $obj->sname</td><td>$obj->groupindex</td><td>$obj->points</td></tr>";
 
 }
-echo "</table>";
 
-echo "</body></html>";
 
 
 ?>
+</table>
+
+</body></html>
