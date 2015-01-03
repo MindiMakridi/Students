@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<?php if(getUserID()){
+	$id = getUserID();
+	$isRegistered = 'profile.php';
+}
+else{
+	$id = 'Регистрация';
+	$isRegistered = 'register.php';
+}
+?>
+
+<html>
+<head>
+<meta charset="utf-8">
+<title><?php echo "$title"; ?></title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h2><a href='index.php' class="navigation">Список</a></h2> <h2><a href='<?php echo $isRegistered?>' class="navigation"><?php echo $id ?> </a></h2><br><br>
+<br>
+<br>
+
+

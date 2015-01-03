@@ -1,0 +1,27 @@
+<br>
+<form action='index.php' method='post'>
+	<input type="text" name="search">
+	<input type="hidden" name="submitted" value="yes">
+	<input type="submit" value="Поиск">
+</form>
+<br>
+<table>
+	<tr><th><a href='index.php?order=<?php echo urlencode($sortName) ?>'>Студент</a></th><th><a href='index.php?order=<?php echo urlencode($sortGroup) ?>'>Номер группы</a></th><th><a href='index.php?order=<?php echo urlencode($sortPoints) ?>'>Баллы</a></th></tr>
+
+	<?php
+
+
+if(isset($_POST['search'])){
+	$search=$_POST['search'];
+$mapper->searchStudents($search, $student);
+}
+else{
+$mapper->showStudents($sort, $student);
+
+}
+
+
+?>
+</table>
+
+</body></html>
