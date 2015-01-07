@@ -1,6 +1,6 @@
 <?php
 require_once "/lib/PDO.php";
-require_once "/lib/student.php";
+
 require_once "/lib/profileclass.php";
 
 class StudentMapper{
@@ -18,12 +18,19 @@ class StudentMapper{
 
 	}
 
-	public function showStudents($sort, $class){
-	$STH  = $this->DBH->query("SELECT name, sname, groupindex, points FROM students ORDER BY $sort");
+	public function showStudents($sort, $order){
+    $regExp = "/^((name)|(groupindex)|(points))$/ui";
+    $regExp2 = "/^(ASC|DESC)$/ui";
+		if(!preg_match($regExp, $sort) && !preg_match($regExp2, $order)){
+			die ("Не верный запрос к базе данных");
+		}
+		else{
+	$STH  = $this->DBH->query("SELECT name, sname, groupindex, points FROM students ORDER BY $sort $order");
 
-    $STH->setFetchMode(PDO::FETCH_CLASS, get_class($class));
-while($obj = $STH->fetch()){
-	echo "<tr><td>$obj->name $obj->sname</td><td>$obj->groupindex</td><td>$obj->points</td></tr>";
+
+   $result = $STH->fetchAll(PDO::FETCH_CLASS, "profile");
+   return $result;
+
 
 }
 
@@ -32,7 +39,7 @@ while($obj = $STH->fetch()){
 	}
 
 
-	public function searchStudents($needle, $class){
+	public function searchStudents($needle){
 		$STH=$this->DBH->prepare("SELECT name, sname, groupindex, points FROM students WHERE name LIKE :name OR sname LIKE :sname OR groupindex=:groupindex OR points=:points" );
 		$STH->bindparam(":name", $name);
 		$STH->bindparam(":sname", $sname);
@@ -45,18 +52,15 @@ while($obj = $STH->fetch()){
 		$points = $needle;
         $STH->execute();
 
-         $STH->setFetchMode(PDO::FETCH_CLASS, get_class($class));
-while($obj = $STH->fetch()){
-	echo "<tr><td>$obj->name $obj->sname</td><td>$obj->groupindex</td><td>$obj->points</td></tr>";
-
-}
+          $result = $STH->fetchAll(PDO::FETCH_CLASS, "profile");
+   return $result;
 
 
 	}
 
 
 
-	public function addStudent($data){
+	public function addStudent($profile){
 		$STH=$this->DBH->prepare("INSERT INTO students (name, sname, email, birthdate, points, sex, groupindex) VALUES (:name, :sname, :email,:birthdate, :points, :sex, :groupindex)");
 	$STH->bindparam(":name", $name);
 	$STH->bindparam(":sname", $sname);
@@ -66,18 +70,18 @@ while($obj = $STH->fetch()){
 	$STH->bindparam(":sex", $sex);
 	$STH->bindparam(":groupindex", $groupindex);
 
-	$name = $data['name'];
-    $sname=$data['sname'];
-    $email=$data['email'];
-    $birthdate=$data['birthdate'];
-    $points=$data['points'];
-    $sex=$data['sex'];
-    $groupindex=$data['groupindex'];
+	$name = $profile->showName();
+    $sname=$profile->showSname();
+    $email=$profile->showEmail();
+    $birthdate=$profile->showBirthDate();
+    $points=$profile->showPoints();
+    $sex=$profile->showSex();
+    $groupindex=$profile->showGroupIndex();
     $STH->execute();
 	}
 
 
-	public function editProfile($data){
+	public function editProfile($profile){
 		$STH=$this->DBH->prepare("UPDATE students SET name=:name, sname=:sname, email=:email, birthdate=:birthdate, points=:points, sex=:sex, groupindex=:groupindex WHERE email=:prevMail");
 	$STH->bindparam(":name", $name);
 	$STH->bindparam(":sname", $sname);
@@ -88,14 +92,14 @@ while($obj = $STH->fetch()){
 	$STH->bindparam(":groupindex", $groupindex);
 	$STH->bindparam(":prevMail", $prevMail);
 
-	$name = $data['name'];
-    $sname=$data['sname'];
-    $email=$data['email'];
-    $birthdate=$data['birthdate'];
-    $points=$data['points'];
-    $sex=$data['sex'];
-    $groupindex=$data['groupindex'];
-    $prevMail=$_COOKIE['studentscookie']['email'];
+    $name = $profile->showName();
+    $sname=$profile->showSname();
+    $email=$profile->showEmail();
+    $birthdate=$profile->showBirthDate();
+    $points=$profile->showPoints();
+    $sex=$profile->showSex();
+    $groupindex=$profile->showGroupIndex();
+    $prevMail=getUserMail();
     $STH->execute();
 	}
 }

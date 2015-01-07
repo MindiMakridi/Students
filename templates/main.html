@@ -1,3 +1,4 @@
+<?php include "/templates/template.html"; ?>
 <br>
 <form action='index.php' method='post'>
 	<input type="text" name="search">
@@ -6,22 +7,14 @@
 </form>
 <br>
 <table>
-	<tr><th><a href='index.php?order=<?php echo urlencode($sortName) ?>'>Студент</a></th><th><a href='index.php?order=<?php echo urlencode($sortGroup) ?>'>Номер группы</a></th><th><a href='index.php?order=<?php echo urlencode($sortPoints) ?>'>Баллы</a></th></tr>
+	<tr><th><a href='index.php?order=name&direction=<?php echo $directionName?>'>Студент</a></th><th><a href='index.php?order=groupindex&direction=
+		<?php echo $directionGroup ?>'>Номер группы</a>
+	</th><th><a href='index.php?order=points&direction=<?php echo $directionPoints ?>'>Баллы</a></th></tr>
 
-	<?php
-
-
-if(isset($_POST['search'])){
-	$search=$_POST['search'];
-$mapper->searchStudents($search, $student);
-}
-else{
-$mapper->showStudents($sort, $student);
-
-}
+	<?php foreach ($table as  $student) {
+		
+	echo "<tr><td>{$student->showName()} {$student->showSname()}</td><td>{$student->showGroupIndex()}</td><td>{$student->ShowPoints()}</td></tr>";
+	}
 
 
 ?>
-</table>
-
-</body></html>

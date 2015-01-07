@@ -1,11 +1,20 @@
 <?php
-require_once "/lib/PDO.php";
-
 require_once "/lib/DataMapper.php";
 require_once "/lib/functions.php";
 
-$title = $_COOKIE['studentscookie']['name'];
-$email=  $_COOKIE['studentscookie']['email'];
+if(getUserID()){
+	$id = getUserID();
+	$isRegistered = 'profile.php';
+}
+else{
+	$id = 'Регистрация';
+	$isRegistered = 'register.php';
+}
+
+$email = getUserMail();
+$tag="textarea";
+
+$title = getUserID();
 
 
 
@@ -16,7 +25,7 @@ $profile=$mapper->fetchProfile($email);
 
 
 
-include "/templates/template.html";
+
 
 if(isset($_POST['submitted'])){
 	
@@ -32,18 +41,14 @@ if($mapper->fetchProfile($email) && $email!= $_COOKIE['studentscookie']['email']
 }
 
 
-include "/templates/profile.html";
+
 
 if(isset($_POST['submitted']) && $profile->checkErrors()){
-	$data['name'] = $profile->showName();
-	$data['sname'] = $profile->showSname();
-	$data['groupindex'] = $profile->showGroupIndex();
-	$data['email'] = $profile->showEmail();
-	$data['points'] = $profile->showPoints();
-	$data['birthdate'] = $profile->showBirthDate();
-	$data['sex'] = $_POST['sex'];
-	$mapper->editProfile($data);
-    setcookie("studentscookie[email]", $data['email']);
-     setcookie("studentscookie[name]", $data['name']);
+	
+	$mapper->editProfile($profile);
+    setcookie("studentscookie[email]", $profile->showEmail());
+     setcookie("studentscookie[name]", $profile->showName());
 }
+include "/templates/template.html";
+include "/templates/profile.html";
 ?>

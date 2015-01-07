@@ -1,20 +1,27 @@
 <br>
 <form action='profile.php' method='post'><pre>
-Имя          <textarea name="name"><?php echo $profile->showName()?></textarea> <?php echo $profile->errors['name']?>
 
-Фамилия      <textarea name="sname"><?php echo $profile->showSname()?></textarea><?php echo  $profile->errors['sname']?>
+Имя          <<?php echo $tag ?> name="name"><?php echo $profile->showName()?></<?php echo $tag ?>> <?php echo $profile->errors['name']?>
+
+
+Фамилия      <<?php echo $tag ?> name="sname"><?php echo $profile->showSname()?></<?php echo $tag ?>><?php echo  $profile->errors['sname']?>
+
 
 Пол          <select size="1" name="sex"><option disabled> Выберите пол</option>
  <option value="М">Мужской</option>
 <option value="Ж">Женский</option></select>
 
- Почта       <textarea name="email"><?php echo $profile->showEmail()?></textarea> <?php echo $profile->errors['email']?>
 
-Группа       <textarea name="groupindex"><?php echo $profile->showGroupIndex()?></textarea> <?php echo $profile->errors['groupindex']?>
+Почта        <<?php echo $tag ?> name="email"><?php echo $profile->showEmail()?></<?php echo $tag ?>> <?php echo $profile->errors['email']?>
 
-Баллы        <textarea name="points"><?php echo $profile->showPoints()?></textarea> <?php echo $profile->errors['points']?>
 
-Год рождения <textarea name="birthdate"><?php echo $profile->showBirthDate()?></textarea> <?php echo $profile->errors['birthdate']?>
+Группа       <<?php echo $tag ?> name="groupindex"><?php echo $profile->showGroupIndex()?></<?php echo $tag ?>> <?php echo $profile->errors['groupindex']?>
+
+
+Баллы        <<?php echo $tag ?> name="points"><?php echo $profile->showPoints()?></<?php echo $tag ?>> <?php echo $profile->errors['points']?>
+
+
+Год рождения <<?php echo $tag ?> name="birthdate"><?php echo $profile->showBirthDate()?></<?php echo $tag ?>> <?php echo $profile->errors['birthdate']?>
 <input type='hidden' name='submitted' value='yes'>
 <input type='submit' value='изменить'>
 </pre>
