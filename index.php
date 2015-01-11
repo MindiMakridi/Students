@@ -6,13 +6,19 @@ require_once "/lib/functions.php";
 
 if(getUserID()){
 	$id = getUserID();
-	$isRegistered = 'profile.php';
+	
+
 }
 else{
 	$id = 'Регистрация';
-	$isRegistered = 'register.php';
+	
 }
 
+if(isset($_POST['exit'])){
+	setcookie('studentscookie[email]', "", time()-3600);
+    setcookie('studentscookie[name]', "", time()-3600);
+    setcookie('studentscookie[code]', "", time()-3600);
+}
 
 
 $title = "Студенты";
@@ -60,12 +66,13 @@ $table = $mapper->showStudents($sort, $order);
 include "/templates/main.html";
 
 
+include "/templates/footer.html";
+
 
 
 ?>
 
 
-</body></html>
 
 
 

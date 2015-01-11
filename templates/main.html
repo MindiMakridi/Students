@@ -1,4 +1,4 @@
-<?php include "/templates/template.html"; ?>
+<?php include "/templates/header.html"; ?>
 <br>
 <form action='index.php' method='post'>
 	<input type="text" name="search">
@@ -7,14 +7,15 @@
 </form>
 <br>
 <table>
-	<tr><th><a href='index.php?order=name&direction=<?php echo $directionName?>'>Студент</a></th><th><a href='index.php?order=groupindex&direction=
+	<tr><th><a href='index.php?order=name&amp;direction=<?php echo $directionName?>'>Студент</a></th><th><a href='index.php?order=groupindex&amp;direction=
 		<?php echo $directionGroup ?>'>Номер группы</a>
-	</th><th><a href='index.php?order=points&direction=<?php echo $directionPoints ?>'>Баллы</a></th></tr>
+	</th><th><a href='index.php?order=points&amp;direction=<?php echo $directionPoints ?>'>Баллы</a></th></tr>
 
-	<?php foreach ($table as  $student) {
+	<!-- Управляющая конструкция с двоеточими и endif вызывает ошибку unexpected string T_ENDIF,  а  <?=?> вместе с содержимым выводится как хтмл код  -->
+	<?php foreach ($table as  $student){ ?>
 		
-	echo "<tr><td>{$student->showName()} {$student->showSname()}</td><td>{$student->showGroupIndex()}</td><td>{$student->ShowPoints()}</td></tr>";
-	}
+	<tr><td><?php echo $student->showName()." ".$student->showSname() ?></td><td><?php echo $student->showGroupIndex() ?></td><td><?php echo $student->ShowPoints() ?></td></tr>
+	
+	<?php } ?>
 
 
-?>

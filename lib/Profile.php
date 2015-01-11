@@ -5,7 +5,7 @@
 class profile
 {
     
-    const ERROR = "<font color=\"red\">Не верный формат данных</font>";
+    const ERROR = "Не верный формат данных";
     
     protected $name;
     protected $sname;
@@ -14,6 +14,7 @@ class profile
     protected $email;
     protected $points;
     protected $birthdate;
+    protected $id;
     
     public $errors = array('name' => null, 'sname' => null, 'sex' => null, 'groupindex' => null, 'email' => null, 'points' => null, 'birthdate' => null);
     
@@ -26,7 +27,7 @@ class profile
         }
         
         
-        echo "<font color=\"green\">Ваши данные сохранены</font>";
+        echo "Ваши данные сохранены";
         return true;
     }
     
@@ -79,7 +80,7 @@ class profile
             $this->errors['groupindex'] = self::ERROR;
         }
         
-        $regExp = "/[a-zA-Z0-9_+.-]+@[a-z.-]+/ui";
+        $regExp = "/[a-zA-Z0-9_+.-]+@[a-z0-9.-]+/ui";
         $temp   = $this->checkField($data['email'], $regExp);
         
         if ($temp) {
@@ -147,6 +148,10 @@ class profile
     public function showSex()
     {
         return $this->sex;
+    }
+
+    public function showID(){
+        return $this->id;
     }
     
 }

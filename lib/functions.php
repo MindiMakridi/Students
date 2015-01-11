@@ -15,5 +15,13 @@ function getUserMail(){
 return false;
 }
 
+function getUserCode(){
+	if(isset($_COOKIE['studentscookie']['code'])){
+		return $code = $_COOKIE['studentscookie']['code'];
+	}
+	return false;
+}
 
+
+$mapper=new StudentMapper($DBH);
 ?>
