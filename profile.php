@@ -2,68 +2,57 @@
 require_once "/lib/DataMapper.php";
 require_once "/lib/functions.php";
 
+$mapper=new StudentMapper($DBH);
 
 $title = "Регистрация";
 
 
 if (getUserCode()) {
-    $id      = getUserID();
+    $isRegistered      = getUserID();
     $email   = getUserMail();
     $code = getUserCode();
     $title   = getUserID();
     $profile = $mapper->fetchProfile($code);
     $value   = "Изменить";
+    $id = $profile->showID();
+}
     
-    if (isset($_POST['submitted'])) {
-        
-        $profile->setFields($_POST);
-        $email = $_POST['email'];
-        
-        if ($mapper->fetchMail($email) && $email != $_COOKIE['studentscookie']['email']) {
-            $profile->setMailError();
-        }
-        
-        
-        
-    }
+
     
-    if (isset($_POST['submitted']) && $profile->checkErrors()) {
-        
-        $mapper->editProfile($profile);
-        setcookie("studentscookie[email]", $profile->showEmail());
-        setcookie("studentscookie[name]", $profile->showName());
-        
-    }
-    
-} else {
-    $id      = 'Регистрация';
+ else {
+    $isRegistered      = 'Регистрация';
     $value   = "Зарегистрироваться";
     $profile = new profile;
-    if (isset($_POST['submitted'])) {
+    $id = 0;
+ }
+
+
+ if (isset($_POST['submitted'])) {
         
         $profile->setFields($_POST);
         $email = $_POST['email'];
-        if ($mapper->fetchMail($email)) {
+       
+        
+        if ($mapper->fetchMail($email, $id)) {
             $profile->setMailError();
+            
         }
-        
-        
-        
     }
-    
-    if (isset($_POST['submitted']) && $profile->checkErrors()) {
+
+
+
+   if (isset($_POST['submitted']) && $profile->checkErrors()) {
+        if(!getUserCode()){
+        $profile->generateCode();
         $mapper->addStudent($profile);
-        setcookie("studentscookie[code]", $mapper->getCode());
-        setcookie("studentscookie[email]", $profile->showEmail());
-        setcookie("studentscookie[name]", $profile->showName());
-        header("Location: $redirect");
+        setcookie("studentscookie[code]", $profile->showCode(), time()+(7*24*60*60*42), "/");
     }
-    
-}
-
-
-
-
+    else{
+         $mapper->editProfile($profile);
+    }
+        updateStudentCookie($profile->showName(), $profile->showEmail());
+        header("Location: $Configredirect");
+    }      
 
 
 include "/templates/header.html";

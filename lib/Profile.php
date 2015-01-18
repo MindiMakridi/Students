@@ -15,6 +15,7 @@ class profile
     protected $points;
     protected $birthdate;
     protected $id;
+    protected $secretcode;
     
     public $errors = array('name' => null, 'sname' => null, 'sex' => null, 'groupindex' => null, 'email' => null, 'points' => null, 'birthdate' => null);
     
@@ -27,17 +28,28 @@ class profile
         }
         
         
-        echo "Ваши данные сохранены";
+        
         return true;
     }
     
     
     
-    
+       public  function generateCode(){
+      $string = "abcdefghijklmnopqrstuvwxyz1234567890";
+        $length = mb_strlen($string);
+        $string = mb_substr($string, mt_rand(0,$length-1), mt_rand(1,$length-1));
+        $salt1      = "pineapple";
+        $salt2      = "clevergirl";
+        
+        
+       $this->secretcode = md5($salt1 . $string . $salt2);
+        
+}
+ 
     
     public function setMailError()
     {
-        $this->errors['email'] = "<font color=\"red\">Введенный электронный адрес занят</font>";
+        $this->errors['email'] = "Введенный электронный адрес занят";
     }
     
     protected function checkField($field, $regExp)
@@ -152,6 +164,10 @@ class profile
 
     public function showID(){
         return $this->id;
+    }
+
+    public function showCode(){
+        return $this->secretcode;
     }
     
 }

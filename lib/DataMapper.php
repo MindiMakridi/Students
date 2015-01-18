@@ -13,7 +13,7 @@ class StudentMapper
     
     public function fetchProfile($code)
     {
-        $STH = $this->DBH->prepare("SELECT name, sname, email, birthdate, points, sex, groupindex, id FROM students WHERE secretcode=:code");
+        $STH = $this->DBH->prepare("SELECT*FROM students WHERE secretcode=:code");
         $STH->bindparam(":code", $code);
         $STH->execute();
         $STH->setFetchMode(PDO::FETCH_CLASS, 'profile');
@@ -22,10 +22,11 @@ class StudentMapper
     }
     
     
-    public function fetchMail($mail)
+    public function fetchMail($email, $id)
     {
-        $STH = $this->DBH->prepare("SELECT name, sname, email, birthdate, points, sex, groupindex, id, code FROM students WHERE email=:email");
+        $STH = $this->DBH->prepare("SELECT*FROM students WHERE email=:email AND id!=:id");
         $STH->bindparam(":email", $email);
+        $STH->bindparam(":id", $id);
         $STH->execute();
         $STH->setFetchMode(PDO::FETCH_CLASS, 'profile');
         return $STH->fetch();
@@ -36,7 +37,7 @@ class StudentMapper
         $regExp  = "/^(name|groupindex|points)$/ui";
         $regExp2 = "/^(ASC|DESC)$/ui";
         if (!preg_match($regExp, $sort) || !preg_match($regExp2, $order)) {
-            throw new Exception("Íå âåğíûé çàïğîñ ê áàçå äàííûõ");
+            throw new Exception("ĞĞµ Ğ²ĞµÑ€Ğ½Ñ‹Ğ¹ Ğ·Ğ°Ğ¿Ñ€Ğ¾Ñ Ğº Ğ±Ğ°Ğ·Ğµ Ğ´Ğ°Ğ½Ğ½Ñ‹Ñ…");
         }
         
         $STH = $this->DBH->query("SELECT name, sname, groupindex, points FROM students ORDER BY $sort $order");
@@ -77,7 +78,8 @@ class StudentMapper
     
     public function addStudent(profile $profile)
     {
-        $STH = $this->DBH->prepare("INSERT INTO students (name, sname, email, birthdate, points, sex, groupindex, secretcode) VALUES (:name, :sname, :email,:birthdate, :points, :sex, :groupindex, :secretcode)");
+        $STH = $this->DBH->prepare("INSERT INTO students (name, sname, email, birthdate, points, sex, groupindex, secretcode) 
+            VALUES (:name, :sname, :email,:birthdate, :points, :sex, :groupindex, :secretcode)");
         $STH->bindparam(":name", $name);
         $STH->bindparam(":sname", $sname);
         $STH->bindparam(":email", $email);
@@ -94,11 +96,7 @@ class StudentMapper
         $points     = $profile->showPoints();
         $sex        = $profile->showSex();
         $groupindex = $profile->showGroupIndex();
-        $salt1      = "pineapple";
-        $salt2      = "clevergirl";
-        
-        
-        $secretcode = md5($salt1 . $email . $salt2);
+        $secretcode = $profile->showCode();
         $STH->execute();
     }
     
@@ -135,13 +133,7 @@ class StudentMapper
         return $id;
     }
     
-    public function getCode()
-    {
-        $id     = $this->getLastId();
-        $STH    = $this->DBH->query("SELECT secretcode FROM students WHERE id = $id");
-        $result = $STH->fetch();
-        return $result[0];
-    }
+   
 }
 
 

@@ -4,20 +4,20 @@
 require_once "/lib/DataMapper.php";
 require_once "/lib/functions.php";
 
+$mapper=new StudentMapper($DBH);
+
 if(getUserID()){
-	$id = getUserID();
+	$isRegistered = getUserID();
 	
 
 }
 else{
-	$id = 'Регистрация';
+	$isRegistered = 'Регистрация';
 	
 }
 
 if(isset($_POST['exit'])){
-	setcookie('studentscookie[email]', "", time()-3600);
-    setcookie('studentscookie[name]', "", time()-3600);
-    setcookie('studentscookie[code]', "", time()-3600);
+	logOut();
 }
 
 
@@ -53,8 +53,8 @@ if(isset($_GET['order'])){
 }
 
 
-if(isset($_POST['search'])){
-	$search=$_POST['search'];
+if(isset($_GET['search'])){
+	$search=$_GET['search'];
 $table = $mapper->searchStudents($search);
 }
 else{
@@ -70,7 +70,7 @@ include "/templates/footer.html";
 
 
 
-?>
+
 
 
 
