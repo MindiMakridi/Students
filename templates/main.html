@@ -17,5 +17,8 @@
 	<tr><td><?php echo htmlspecialchars($student->showName(), ENT_QUOTES)." ".htmlspecialchars($student->showSname(), ENT_QUOTES) ?></td><td><?php echo htmlspecialchars($student->showGroupIndex(), ENT_QUOTES) ?></td><td><?php echo htmlspecialchars($student->ShowPoints(), ENT_QUOTES) ?></td></tr>
 	
 	<?php } ?>
+	<?php for($i=0; $i<$pages; $i++){ ?>
+	<a href=<?php echo htmlspecialchars($currentPage)?>?num=<?php echo $i*50?>><?php echo $i+1 ?></a>
+	<?php }?>
 
 

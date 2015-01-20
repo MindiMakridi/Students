@@ -1,12 +1,11 @@
 <?php
-require_once "/lib/PDO.php";
 
 require_once "/lib/Profile.php";
 
-class StudentMapper
+class DataMapper
 {
     public $DBH;
-    public function __construct($DBH)
+    public function __construct(PDO $DBH)
     {
         $this->DBH = $DBH;
     }
@@ -22,7 +21,7 @@ class StudentMapper
     }
     
     
-    public function fetchMail($email, $id)
+    public function isEmailUsed($email, $id)
     {
         $STH = $this->DBH->prepare("SELECT*FROM students WHERE email=:email AND id!=:id");
         $STH->bindparam(":email", $email);
@@ -32,15 +31,16 @@ class StudentMapper
         return $STH->fetch();
     }
     
-    public function showStudents($sort, $order)
+    public function showStudents($sort, $order, $num)
     {
         $regExp  = "/^(name|groupindex|points)$/ui";
         $regExp2 = "/^(ASC|DESC)$/ui";
-        if (!preg_match($regExp, $sort) || !preg_match($regExp2, $order)) {
+        $regExp3 = "/^[0-9]+$/ui";
+        if (!preg_match($regExp, $sort) || !preg_match($regExp2, $order) || !preg_match($regExp3, $num)) {
             throw new Exception("Не верный запрос к базе данных");
         }
         
-        $STH = $this->DBH->query("SELECT name, sname, groupindex, points FROM students ORDER BY $sort $order");
+        $STH = $this->DBH->query("SELECT name, sname, groupindex, points FROM students ORDER BY $sort $order LIMIT $num,50");
         
         
         $result = $STH->fetchAll(PDO::FETCH_CLASS, "profile");
@@ -76,7 +76,7 @@ class StudentMapper
     
     
     
-    public function addStudent(profile $profile)
+    public function addStudent(Profile $profile)
     {
         $STH = $this->DBH->prepare("INSERT INTO students (name, sname, email, birthdate, points, sex, groupindex, secretcode) 
             VALUES (:name, :sname, :email,:birthdate, :points, :sex, :groupindex, :secretcode)");
@@ -101,7 +101,7 @@ class StudentMapper
     }
     
     
-    public function editProfile($profile)
+    public function editProfile(Profile $profile)
     {
         $STH = $this->DBH->prepare("UPDATE students SET name=:name, sname=:sname, email=:email, birthdate=:birthdate, points=:points, sex=:sex, groupindex=:groupindex WHERE id=:id");
         $STH->bindparam(":name", $name);

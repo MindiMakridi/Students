@@ -3,8 +3,11 @@
 
 require_once "/lib/DataMapper.php";
 require_once "/lib/functions.php";
+require_once "/lib/PDO.php";
 
-$mapper=new StudentMapper($DBH);
+$mapper=new DataMapper($DBH);
+$pages = ceil($mapper->getLastId()/50);
+
 
 if(getUserID()){
 	$isRegistered = getUserID();
@@ -18,6 +21,7 @@ else{
 
 if(isset($_POST['exit'])){
 	logOut();
+	header("Location: $currentPage");
 }
 
 
@@ -27,7 +31,10 @@ $title = "Студенты";
 $directionName="ASC";
 $directionGroup="ASC";
 $directionPoints="ASC";
-
+$num = 0;
+if(isset($_GET['num'])){
+	$num = $_GET['num'];
+}
 
 
 $sort='points';
@@ -58,7 +65,7 @@ if(isset($_GET['search'])){
 $table = $mapper->searchStudents($search);
 }
 else{
-$table = $mapper->showStudents($sort, $order);
+$table = $mapper->showStudents($sort, $order, $num);
 
 }
 

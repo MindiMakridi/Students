@@ -1,8 +1,13 @@
 <?php
 require_once "/lib/DataMapper.php";
 require_once "/lib/functions.php";
+require_once "/lib/PDO.php";
 
-$mapper=new StudentMapper($DBH);
+$mapper=new DataMapper($DBH);
+if(isset($_POST['exit'])){
+    logOut();
+    header("Location: $currentPage");
+}
 
 $title = "Регистрация";
 
@@ -12,6 +17,9 @@ if (getUserCode()) {
     $email   = getUserMail();
     $code = getUserCode();
     $title   = getUserID();
+    if(!$mapper->fetchProfile($code)){
+        throw new Exception("Не удалось загрузить профиль");
+    }
     $profile = $mapper->fetchProfile($code);
     $value   = "Изменить";
     $id = $profile->showID();
@@ -22,7 +30,7 @@ if (getUserCode()) {
  else {
     $isRegistered      = 'Регистрация';
     $value   = "Зарегистрироваться";
-    $profile = new profile;
+    $profile = new Profile;
     $id = 0;
  }
 
@@ -33,7 +41,7 @@ if (getUserCode()) {
         $email = $_POST['email'];
        
         
-        if ($mapper->fetchMail($email, $id)) {
+        if ($mapper->isEmailUsed($email, $id)) {
             $profile->setMailError();
             
         }

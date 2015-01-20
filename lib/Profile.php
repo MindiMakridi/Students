@@ -2,7 +2,7 @@
 
 
 
-class profile
+class Profile
 {
     
     const ERROR = "Не верный формат данных";
@@ -37,12 +37,14 @@ class profile
        public  function generateCode(){
       $string = "abcdefghijklmnopqrstuvwxyz1234567890";
         $length = mb_strlen($string);
-        $string = mb_substr($string, mt_rand(0,$length-1), mt_rand(1,$length-1));
+        for($i=0; $i<=5; $i++){
+            $cypher.= mb_substr($string, mt_rand(0, $length-1), mt_rand(1, $length-1));
+        }
         $salt1      = "pineapple";
         $salt2      = "clevergirl";
         
         
-       $this->secretcode = md5($salt1 . $string . $salt2);
+       $this->secretcode = md5($salt1 . $cypher . $salt2);
         
 }
  
@@ -81,7 +83,7 @@ class profile
         if (isset($data['sex'])) {
             $this->sex = $data['sex'];
         } else {
-            $this->errors['sex'] = "<font color=\"red\">Пол не выбран</font>";
+            $this->errors['sex'] = "Пол не выбран";
         }
         
         $regExp = "/^[0-9]+$/";
