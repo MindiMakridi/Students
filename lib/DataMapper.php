@@ -31,7 +31,7 @@ class DataMapper
         return $STH->fetch();
     }
     
-    public function showStudents($sort, $order, $num)
+    public function showStudents($sort, $order, $num, $recordsPerPage)
     {
         $regExp  = "/^(name|groupindex|points)$/ui";
         $regExp2 = "/^(ASC|DESC)$/ui";
@@ -40,7 +40,7 @@ class DataMapper
             throw new Exception("Не верный запрос к базе данных");
         }
         
-        $STH = $this->DBH->query("SELECT name, sname, groupindex, points FROM students ORDER BY $sort $order LIMIT $num,50");
+        $STH = $this->DBH->query("SELECT name, sname, groupindex, points FROM students ORDER BY $sort $order LIMIT $num, $recordsPerPage");
         
         
         $result = $STH->fetchAll(PDO::FETCH_CLASS, "profile");
@@ -127,7 +127,7 @@ class DataMapper
     public function getLastId()
     {
         
-        $STH    = $this->DBH->query("SELECT id FROM students ORDER BY id DESC");
+        $STH    = $this->DBH->query("SELECT COUNT(*) FROM students");
         $result = $STH->fetch();
         $id     = $result[0];
         return $id;

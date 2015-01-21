@@ -7,9 +7,9 @@
 </form>
 <br>
 <table>
-	<tr><th><a href='index.php?order=name&amp;direction=<?php echo $directionName?>'>Студент</a></th><th><a href='index.php?order=groupindex&amp;direction=
-		<?php echo $directionGroup ?>'>Номер группы</a>
-	</th><th><a href='index.php?order=points&amp;direction=<?php echo $directionPoints ?>'>Баллы</a></th></tr>
+	<tr><th><a href='index.php?order=name&amp;direction=<?php echo $directionName?>&amp;num=<?php echo htmlspecialchars($num, ENT_QUOTES)?>'>Студент</a></th><th><a href='index.php?order=groupindex&amp;direction=
+		<?php echo $directionGroup ?>&amp;num=<?php echo htmlspecialchars($num, ENT_QUOTES)?>'>Номер группы</a>
+	</th><th><a href='index.php?order=points&amp;direction=<?php echo $directionPoints ?>&amp;num=<?php echo htmlspecialchars($num, ENT_QUOTES)?>'>Баллы</a></th></tr>
 
 	<!-- Управляющая конструкция с двоеточими и endif вызывает ошибку unexpected string T_ENDIF,  а  <?=?> вместе с содержимым выводится как хтмл код  -->
 	<?php foreach ($table as  $student){ ?>

@@ -2,6 +2,7 @@
 require_once "/lib/DataMapper.php";
 require_once "/lib/functions.php";
 require_once "/lib/PDO.php";
+var_dump($_COOKIE);
 
 $mapper=new DataMapper($DBH);
 if(isset($_POST['exit'])){
@@ -60,6 +61,7 @@ if (getUserCode()) {
     }
         updateStudentCookie($profile->showName(), $profile->showEmail());
         header("Location: $Configredirect");
+        die("Регистрация завершена");
     }      
 
 

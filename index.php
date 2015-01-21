@@ -5,8 +5,11 @@ require_once "/lib/DataMapper.php";
 require_once "/lib/functions.php";
 require_once "/lib/PDO.php";
 
+var_dump($_COOKIE);
+
 $mapper=new DataMapper($DBH);
-$pages = ceil($mapper->getLastId()/50);
+
+$pages = ceil($mapper->getLastId()/$recordsPerPage);
 
 
 if(getUserID()){
@@ -65,7 +68,7 @@ if(isset($_GET['search'])){
 $table = $mapper->searchStudents($search);
 }
 else{
-$table = $mapper->showStudents($sort, $order, $num);
+$table = $mapper->showStudents($sort, $order, $num, $recordsPerPage);
 
 }
 
