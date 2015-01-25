@@ -128,8 +128,8 @@ class DataMapper
     {
         
         $STH    = $this->DBH->query("SELECT COUNT(*) FROM students");
-        $result = $STH->fetch();
-        $id     = $result[0];
+        $result = $STH->fetchColumn();
+        $id     = $result;
         return $id;
     }
     

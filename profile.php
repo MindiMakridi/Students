@@ -2,10 +2,10 @@
 require_once "/lib/DataMapper.php";
 require_once "/lib/functions.php";
 require_once "/lib/PDO.php";
-var_dump($_COOKIE);
 
-$mapper=new DataMapper($DBH);
-if(isset($_POST['exit'])){
+
+$mapper = new DataMapper($DBH);
+if (isset($_POST['exit'])) {
     logOut();
     header("Location: $currentPage");
 }
@@ -14,58 +14,56 @@ $title = "Регистрация";
 
 
 if (getUserCode()) {
-    $isRegistered      = getUserID();
-    $email   = getUserMail();
-    $code = getUserCode();
-    $title   = getUserID();
-    if(!$mapper->fetchProfile($code)){
+    $isRegistered = getUserID();
+    $email        = getUserMail();
+    $code         = getUserCode();
+    $title        = getUserID();
+    if (!$mapper->fetchProfile($code)) {
         throw new Exception("Не удалось загрузить профиль");
     }
     $profile = $mapper->fetchProfile($code);
     $value   = "Изменить";
-    $id = $profile->showID();
+    $id      = $profile->showID();
 }
+
+
+
+else {
+    $isRegistered = 'Регистрация';
+    $value        = "Зарегистрироваться";
+    $profile      = new Profile;
+    $id           = 0;
+}
+
+
+if (isset($_POST['submitted'])) {
     
-
+    $profile->setFields($_POST);
+    $email = $_POST['email'];
     
- else {
-    $isRegistered      = 'Регистрация';
-    $value   = "Зарегистрироваться";
-    $profile = new Profile;
-    $id = 0;
- }
-
-
- if (isset($_POST['submitted'])) {
+    
+    if ($mapper->isEmailUsed($email, $id)) {
+        $profile->setMailError();
         
-        $profile->setFields($_POST);
-        $email = $_POST['email'];
-       
-        
-        if ($mapper->isEmailUsed($email, $id)) {
-            $profile->setMailError();
-            
-        }
     }
+}
 
 
 
-   if (isset($_POST['submitted']) && $profile->checkErrors()) {
-        if(!getUserCode()){
+if (isset($_POST['submitted']) && $profile->checkErrors()) {
+    if (!getUserCode()) {
         $profile->generateCode();
         $mapper->addStudent($profile);
-        setcookie("studentscookie[code]", $profile->showCode(), time()+(7*24*60*60*42), "/");
+        setcookie("studentscookie[code]", $profile->showCode(), time() + (7 * 24 * 60 * 60 * 42), "/");
+    } else {
+        $mapper->editProfile($profile);
     }
-    else{
-         $mapper->editProfile($profile);
-    }
-        updateStudentCookie($profile->showName(), $profile->showEmail());
-        header("Location: $Configredirect");
-        die("Регистрация завершена");
-    }      
+    updateStudentCookie($profile->showName(), $profile->showEmail());
+    header("Location: $Configredirect");
+    die;
+}
 
 
 include "/templates/header.html";
 include "/templates/profile.html";
 include "/templates/footer.html";
-?>

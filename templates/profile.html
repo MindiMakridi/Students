@@ -7,9 +7,9 @@
 Фамилия      <input type="text" name="sname" value="<?php echo htmlspecialchars($profile->showSname()) ?>"><font color="red"><?php echo  $profile->errors['sname']?></font>
 
 
-Пол          <select size="1" name="sex"><option disabled> Выберите пол</option>
+Пол          <select size="1" name="sex"><option disabled selected> Выберите пол</option>
  <option value="М" <?php if($profile->showSex()=='М'): ?> selected<?php endif; ?>>Мужской</option>
-<option value="Ж"  <?php if($profile->showSex()=='Ж'): ?> selected<?php endif; ?>>Женский</option></select>
+<option value="Ж"  <?php if($profile->showSex()=='Ж'): ?> selected<?php endif; ?>>Женский</option></select><font color="red"><?php echo $profile->errors['sex'] ?></font>
 
 
 Почта        <input type="text" name="email" value="<?php echo htmlspecialchars($profile->showEmail()) ?>"> <font color="red"><?php echo $profile->errors['email']?></font>

@@ -34,20 +34,21 @@ class Profile
     
     
     
-       public  function generateCode(){
-      $string = "abcdefghijklmnopqrstuvwxyz1234567890";
+    public function generateCode()
+    {
+        $string = "abcdefghijklmnopqrstuvwxyz1234567890";
         $length = mb_strlen($string);
-        for($i=0; $i<=5; $i++){
-            $cypher.= mb_substr($string, mt_rand(0, $length-1), mt_rand(1, $length-1));
+        for ($i = 0; $i <= 10; $i++) {
+            $cypher .= mb_substr($string, mt_rand(0, $length - 1), 1);
         }
-        $salt1      = "pineapple";
-        $salt2      = "clevergirl";
+        $salt1 = "pineapple";
+        $salt2 = "clevergirl";
         
         
-       $this->secretcode = md5($salt1 . $cypher . $salt2);
+        $this->secretcode = md5($salt1 . $cypher . $salt2);
         
-}
- 
+    }
+    
     
     public function setMailError()
     {
@@ -65,17 +66,22 @@ class Profile
     
     public function setFields($data)
     {
-        $regExp = "/^[а-я]+$/ui";
-        if ($this->checkField($data['name'], $regExp)) {
-            $this->name = $this->checkField($data['name'], $regExp);
-        } else {
-            $this->errors['name'] = self::ERROR;
+        foreach ($data as $key => $value) {
+            $data[$key] = trim($value);
         }
         
-        $temp = $this->checkField($data['sname'], $regExp);
-        if ($temp) {
-            $this->sname = $temp;
-        } else {
+        $regExp     = "/^[а-яa-z-]+$/ui";
+        $temp       = $this->checkField($data['name'], $regExp);
+        $this->name = $data['name'];
+        if (!$temp) {
+            $this->errors['name'] = self::ERROR;
+            
+        }
+        
+        $temp        = $this->checkField($data['sname'], $regExp);
+        $this->sname = $data['sname'];
+        if (!$temp) {
+            
             $this->errors['sname'] = self::ERROR;
         }
         
@@ -86,42 +92,38 @@ class Profile
             $this->errors['sex'] = "Пол не выбран";
         }
         
-        $regExp = "/^[0-9]+$/";
-        $temp   = $this->checkField($data['groupindex'], $regExp);
-        if ($temp && $temp <= 99999 && $temp > 999) {
-            $this->groupindex = $temp;
-        } else {
+        $regExp           = "/^[0-9]+$/";
+        $temp             = $this->checkField($data['groupindex'], $regExp);
+        $this->groupindex = $data['groupindex'];
+        if (!($temp && $temp <= 99999 && $temp > 999)) {
+            
             $this->errors['groupindex'] = self::ERROR;
         }
         
-        $regExp = "/[a-zA-Z0-9_+.-]+@[a-z0-9.-]+/ui";
-        $temp   = $this->checkField($data['email'], $regExp);
-        
-        if ($temp) {
-            
-            $this->email = $temp;
-        }
-        
-        else {
+        $regExp      = "/[a-zA-Z0-9_+.-]+@[a-z0-9.-]+(\.)[a-z]{2,}/ui";
+        $temp        = $this->checkField($data['email'], $regExp);
+        $this->email = $data['email'];
+        if (!$temp) {
             $this->errors['email'] = self::ERROR;
+            
         }
+        
+        
         
         
         $regExp = "/^[0-9]+$/";
         
-        $temp = $this->checkField($data['points'], $regExp);
-        if ($temp && $temp <= 500) {
-            $this->points = $temp;
-        }
-        
-        else {
+        $temp         = $this->checkField($data['points'], $regExp);
+        $this->points = $data['points'];
+        if (!($temp && $temp <= 500)) {
             $this->errors['points'] = self::ERROR;
         }
         
-        $temp = $this->checkField($data['birthdate'], $regExp);
-        if ($temp && $temp >= 1900 && $temp <= 2010) {
-            $this->birthdate = $temp;
-        } else {
+        
+        
+        $temp            = $this->checkField($data['birthdate'], $regExp);
+        $this->birthdate = $data['birthdate'];
+        if (!($temp && $temp >= 1900 && $temp <= 2010)) {
             $this->errors['birthdate'] = self::ERROR;
         }
     }
@@ -163,12 +165,14 @@ class Profile
     {
         return $this->sex;
     }
-
-    public function showID(){
+    
+    public function showID()
+    {
         return $this->id;
     }
-
-    public function showCode(){
+    
+    public function showCode()
+    {
         return $this->secretcode;
     }
     

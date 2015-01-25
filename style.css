@@ -37,6 +37,7 @@ h2{
 a.navigation{
 	text-decoration: none;
 
+
 }
 table{
 	border:1px inset black;
@@ -48,4 +49,19 @@ th{
 }
 td{
 	border:3px inset black;
+}
+
+a:link{
+	text-decoration: none;
+	color:black;
+}
+
+a:visited{
+	text-decoration: none;
+	color:black;
+}
+
+a:active{
+	text-decoration: none;
+	color:black;
 }
