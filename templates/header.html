@@ -4,13 +4,13 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title><?php echo "$title"; ?></title>
+<title><?="$title"; ?></title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h2><a href='index.php' class="navigation">Список</a></h2> <h2><a href='profile.php' class="navigation"><?php echo htmlspecialchars($isRegistered, ENT_QUOTES) ?> </a></h2><br><br>
+<h2><a href='index.php' class="navigation">Список</a></h2> <h2><a href='profile.php' class="navigation"><?= htmlspecialchars($isRegistered, ENT_QUOTES) ?> </a></h2><br><br>
 <form method="post">
-	<input type='hidden' name="exit" action="<?php echo htmlspecialchars($currentPage, ENT_QUOTES) ?>">
+	<input type='hidden' name="exit" action="<?= htmlspecialchars($currentPage, ENT_QUOTES) ?>">
 	<input type='submit' value="Выход">
 </form>	
 <br>

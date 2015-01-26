@@ -1,29 +1,29 @@
 <br>
 <form  method='post'><pre>
 
-Имя          <input type="text" name="name" value="<?php echo htmlspecialchars($profile->showName()) ?>"> <font color="red"><?php echo $profile->errors['name']?></font>
+Имя          <input type="text" name="name" value="<?= htmlspecialchars($profile->showName()) ?>"> <font color="red"><?= $profile->errors['name']?></font>
 
 
-Фамилия      <input type="text" name="sname" value="<?php echo htmlspecialchars($profile->showSname()) ?>"><font color="red"><?php echo  $profile->errors['sname']?></font>
+Фамилия      <input type="text" name="sname" value="<?= htmlspecialchars($profile->showSname()) ?>"><font color="red"><?=  $profile->errors['sname']?></font>
 
 
 Пол          <select size="1" name="sex"><option disabled selected> Выберите пол</option>
- <option value="М" <?php if($profile->showSex()=='М'): ?> selected<?php endif; ?>>Мужской</option>
-<option value="Ж"  <?php if($profile->showSex()=='Ж'): ?> selected<?php endif; ?>>Женский</option></select><font color="red"><?php echo $profile->errors['sex'] ?></font>
+ <option value="Male" <?php if($profile->showSex()=='Male'): ?> selected<?php endif; ?>>Мужской</option>
+<option value="Female"  <?php if($profile->showSex()=='Female'): ?> selected<?php endif; ?>>Женский</option></select><font color="red"><?= $profile->errors['sex'] ?></font>
 
 
-Почта        <input type="text" name="email" value="<?php echo htmlspecialchars($profile->showEmail()) ?>"> <font color="red"><?php echo $profile->errors['email']?></font>
+Почта        <input type="text" name="email" value="<?= htmlspecialchars($profile->showEmail()) ?>"> <font color="red"><?= $profile->errors['email']?></font>
 
 
-Группа       <input type="text" name="groupindex" value="<?php echo htmlspecialchars($profile->showGroupIndex()) ?>"> <font color="red"><?php echo $profile->errors['groupindex']?></font>
+Группа       <input type="text" name="groupindex" value="<?= htmlspecialchars($profile->showGroupIndex()) ?>"> <font color="red"><?= $profile->errors['groupindex']?></font>
 
 
-Баллы        <input type="text" name="points" value="<?php echo htmlspecialchars($profile->showPoints()) ?>"><font color="red"> <?php echo $profile->errors['points']?></font>
+Баллы        <input type="text" name="points" value="<?= htmlspecialchars($profile->showPoints()) ?>"><font color="red"> <?= $profile->errors['points']?></font>
 
 
-Год рождения <input type="text" name="birthdate" value="<?php echo htmlspecialchars($profile->showBirthDate()) ?>"><font color="red"> <?php echo $profile->errors['birthdate']?></font>
+Год рождения <input type="text" name="birthdate" value="<?= htmlspecialchars($profile->showBirthDate()) ?>"><font color="red"> <?= $profile->errors['birthdate']?></font>
 <input type='hidden' name='submitted' value='yes'>
 
-<input type='submit' value='<?php echo htmlspecialchars($value) ?>'>
+<input type='submit' value='<?= htmlspecialchars($value) ?>'>
 </pre>
 </form>
