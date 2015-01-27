@@ -40,8 +40,12 @@ class DataMapper
             throw new Exception("Не верный запрос к базе данных");
         }
         
-        $STH = $this->DBH->query("SELECT name, sname, groupindex, points FROM students ORDER BY $sort $order LIMIT $num, $recordsPerPage");
-        
+        $STH = $this->DBH->prepare("SELECT name, sname, groupindex, points FROM students ORDER BY :sort :order LIMIT :num, :records");
+        $STH->bindValue(":sort", $sort, PDO::PARAM_STR);
+        $STH->bindValue(":order", $order, PDO::PARAM_STR);
+        $STH->bindValue(":num", $num, PDO::PARAM_INT);
+        $STH->bindValue(":records", $recordsPerPage, PDO::PARAM_INT);
+        $STH->execute();
         
         $result = $STH->fetchAll(PDO::FETCH_CLASS, "profile");
         return $result;

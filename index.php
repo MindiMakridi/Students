@@ -87,7 +87,7 @@ switch ($sort) {
 }
 
 
-if (isset($_GET['search'])) {
+if (isset($_GET['search']) && trim($_GET['search']!="")) {
     $search     = $_GET['search'];
     $table      = $mapper->searchStudents($search);
     $searchText = "Показываются только студенты, найденные по словам $search";

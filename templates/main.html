@@ -6,10 +6,10 @@
 	<input type="submit" value="Поиск">
 </form>
 <br>
-<?php if(isset($_GET['search'])){?>
+<?php if($search!=""):?>
 <p><?=$searchText?></p>
 <a href="index.php">Показать всех</a>
-<?php }?>
+<?php endif ?>
 <table>
 	<tr><th><a href='index.php?order=name&amp;direction=<?= $directionName?>&amp;num=0'><?= $nameArrow ?>Студент</a></th><th><a href='index.php?order=groupindex&amp;direction=
 		<?= $directionGroup ?>&amp;num=0'><?= $groupArrow ?>Номер группы</a>
