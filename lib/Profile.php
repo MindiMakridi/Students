@@ -70,7 +70,7 @@ class Profile
             $data[$key] = trim($value);
         }
         
-        $regExp     = "/^[а-яa-z-]+$/ui";
+        $regExp     = "/^[а-яa-zё-]+$/ui";
         $temp       = $this->checkField($data['name'], $regExp);
         $this->name = $data['name'];
         if (!$temp) {
@@ -100,7 +100,7 @@ class Profile
             $this->errors['groupindex'] = self::ERROR;
         }
         
-        $regExp      = "/[a-zA-Z0-9_+.-]+@[a-z0-9.-]+(\.)[a-z]{2,}/ui";
+        $regExp      = "/^[a-zA-Z0-9_+.-]+@[a-z0-9.-]+(\.)[a-z]{2,}$/ui";
         $temp        = $this->checkField($data['email'], $regExp);
         $this->email = $data['email'];
         if (!$temp) {

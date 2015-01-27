@@ -40,10 +40,8 @@ class DataMapper
             throw new Exception("Не верный запрос к базе данных");
         }
         
-        $STH = $this->DBH->prepare("SELECT name, sname, groupindex, points FROM students ORDER BY :sort :order LIMIT :num, :records");
-        $STH->bindValue(":sort", $sort, PDO::PARAM_STR);
-        $STH->bindValue(":order", $order, PDO::PARAM_STR);
-        $STH->bindValue(":num", $num, PDO::PARAM_INT);
+        $STH = $this->DBH->prepare("SELECT name, sname, groupindex, points FROM students ORDER BY $sort $order LIMIT :num, :records");
+        $STH->bindValue(":num", intval($num), PDO::PARAM_INT);
         $STH->bindValue(":records", $recordsPerPage, PDO::PARAM_INT);
         $STH->execute();
         
@@ -58,13 +56,22 @@ class DataMapper
     }
     
     
-    public function searchStudents($needle)
+    public function searchStudents($needle, $num, $recordsPerPage, $sort, $order)
     {
-        $STH = $this->DBH->prepare("SELECT name, sname, groupindex, points FROM students WHERE name LIKE :name OR sname LIKE :sname OR groupindex=:groupindex OR points=:points");
+
+        $regExp  = "/^(name|groupindex|points)$/ui";
+        $regExp2 = "/^(ASC|DESC)$/ui";
+        $regExp3 = "/^[0-9]+$/ui";
+        if (!preg_match($regExp, $sort) || !preg_match($regExp2, $order) || !preg_match($regExp3, $num)) {
+            throw new Exception("Не верный запрос к базе данных");
+        }
+        $STH = $this->DBH->prepare("SELECT name, sname, groupindex, points FROM students WHERE name LIKE :name OR sname LIKE :sname OR groupindex=:groupindex OR points=:points ORDER BY $sort $order LIMIT :num, :records");
         $STH->bindparam(":name", $name);
         $STH->bindparam(":sname", $sname);
         $STH->bindparam(":groupindex", $groupindex);
         $STH->bindparam(":points", $points);
+        $STH->bindValue(":num", intval($num), PDO::PARAM_INT);
+        $STH->bindValue(":records", $recordsPerPage, PDO::PARAM_INT);
         
         $name       = "%" . $needle . "%";
         $sname      = "%" . $needle . "%";
@@ -135,6 +142,24 @@ class DataMapper
         $result = $STH->fetchColumn();
         $id     = $result;
         return $id;
+    }
+
+    public function getSearchCount($needle) {
+        $STH = $this->DBH->prepare("SELECT COUNT(*) FROM students  
+            WHERE name LIKE :name OR sname LIKE :sname OR groupindex=:groupindex OR points=:points");
+          $STH->bindparam(":name", $name);
+        $STH->bindparam(":sname", $sname);
+        $STH->bindparam(":groupindex", $groupindex);
+        $STH->bindparam(":points", $points);
+       
+        
+        $name       = "%" . $needle . "%";
+        $sname      = "%" . $needle . "%";
+        $groupindex = $needle;
+        $points     = $needle;
+        $STH->execute();
+        $result = $STH->fetchColumn();
+        return $result;
     }
     
    

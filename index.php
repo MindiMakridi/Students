@@ -37,7 +37,7 @@ $search      = "";
 
 $directionName   = "ASC";
 $directionGroup  = "ASC";
-$directionPoints = "ASC";
+$directionPoints = "DESC";
 $num             = 0;
 if (isset($_GET['num'])) {
     $num = $_GET['num'];
@@ -67,6 +67,10 @@ if (isset($_GET['order'])) {
     }
 }
 
+if($sort == 'points' && $order  == "DESC"){
+    $directionPoints = "ASC";
+}
+
 if ($order == 'ASC') {
     $arrow = "&uarr;";
 } else {
@@ -89,7 +93,8 @@ switch ($sort) {
 
 if (isset($_GET['search']) && trim($_GET['search']!="")) {
     $search     = $_GET['search'];
-    $table      = $mapper->searchStudents($search);
+    $pages = ceil($mapper->getSearchCount($search) / $recordsPerPage);
+    $table      = $mapper->searchStudents($search, $num, $recordsPerPage, $sort, $order);
     $searchText = "Показываются только студенты, найденные по словам $search";
 } else {
     $table = $mapper->showStudents($sort, $order, $num, $recordsPerPage);
