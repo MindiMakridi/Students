@@ -33,10 +33,10 @@ class DataMapper
     
     public function showStudents($sort, $order, $num, $recordsPerPage)
     {
-        $regExp  = "/^(name|groupindex|points)$/ui";
-        $regExp2 = "/^(ASC|DESC)$/ui";
-        $regExp3 = "/^[0-9]+$/ui";
-        if (!preg_match($regExp, $sort) || !preg_match($regExp2, $order) || !preg_match($regExp3, $num)) {
+        $regExp      = "/^(name|groupindex|points)$/ui";
+        $orderRegExp = "/^(ASC|DESC)$/ui";
+        $numRegExp   = "/^[0-9]+$/ui";
+        if (!preg_match($regExp, $sort) || !preg_match($orderRegExp, $order) || !preg_match($numRegExp, $num)) {
             throw new Exception("Не верный запрос к базе данных");
         }
         
@@ -58,11 +58,11 @@ class DataMapper
     
     public function searchStudents($needle, $num, $recordsPerPage, $sort, $order)
     {
-
-        $regExp  = "/^(name|groupindex|points)$/ui";
-        $regExp2 = "/^(ASC|DESC)$/ui";
-        $regExp3 = "/^[0-9]+$/ui";
-        if (!preg_match($regExp, $sort) || !preg_match($regExp2, $order) || !preg_match($regExp3, $num)) {
+        
+        $regExp      = "/^(name|groupindex|points)$/ui";
+        $orderRegExp = "/^(ASC|DESC)$/ui";
+        $numRegExp   = "/^[0-9]+$/ui";
+        if (!preg_match($regExp, $sort) || !preg_match($orderRegExp, $order) || !preg_match($numRegExp, $num)) {
             throw new Exception("Не верный запрос к базе данных");
         }
         $STH = $this->DBH->prepare("SELECT name, sname, groupindex, points FROM students WHERE name LIKE :name OR sname LIKE :sname OR groupindex=:groupindex OR points=:points ORDER BY $sort $order LIMIT :num, :records");
@@ -143,15 +143,16 @@ class DataMapper
         $id     = $result;
         return $id;
     }
-
-    public function getSearchCount($needle) {
+    
+    public function getSearchCount($needle)
+    {
         $STH = $this->DBH->prepare("SELECT COUNT(*) FROM students  
             WHERE name LIKE :name OR sname LIKE :sname OR groupindex=:groupindex OR points=:points");
-          $STH->bindparam(":name", $name);
+        $STH->bindparam(":name", $name);
         $STH->bindparam(":sname", $sname);
         $STH->bindparam(":groupindex", $groupindex);
         $STH->bindparam(":points", $points);
-       
+        
         
         $name       = "%" . $needle . "%";
         $sname      = "%" . $needle . "%";
@@ -162,7 +163,7 @@ class DataMapper
         return $result;
     }
     
-   
+    
 }
 
 

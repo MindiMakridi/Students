@@ -3,7 +3,10 @@ require_once "/lib/DataMapper.php";
 require_once "/lib/functions.php";
 require_once "/lib/PDO.php";
 
-
+$message = "";
+if (isset($_GET['msg'])) {
+    $message = $_GET['msg'];
+}
 $mapper = new DataMapper($DBH);
 if (isset($_POST['exit'])) {
     logOut();
@@ -18,12 +21,12 @@ if (getUserCode()) {
     $email        = getUserMail();
     $code         = getUserCode();
     $title        = getUserID();
-    if (!$mapper->fetchProfile($code)) {
+    if (!($profile = $mapper->fetchProfile($code))) {
         throw new Exception("Не удалось загрузить профиль");
     }
-    $profile = $mapper->fetchProfile($code);
-    $value   = "Изменить";
-    $id      = $profile->showID();
+    
+    $value = "Изменить";
+    $id    = $profile->showID();
 }
 
 
@@ -54,12 +57,14 @@ if (isset($_POST['submitted']) && $profile->checkErrors()) {
     if (!getUserCode()) {
         $profile->generateCode();
         $mapper->addStudent($profile);
+        $report = "Вы успешно зарегистрировались";
         setcookie("studentscookie[code]", $profile->showCode(), time() + (7 * 24 * 60 * 60 * 42), "/");
     } else {
+        $report = "Изменения сохранены";
         $mapper->editProfile($profile);
     }
     updateStudentCookie($profile->showName(), $profile->showEmail());
-    header("Location: $Configredirect");
+    header("Location: http://students.ru/profile.php?msg=$report");
     die;
 }
 

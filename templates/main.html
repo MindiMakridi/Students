@@ -1,40 +1,64 @@
-<?php include "/templates/header.html"; ?>
+<?php
+include "/templates/header.html";
+?>
 <br>
 <form action='index.php' method='get'>
-	<input type="text" name="search" value=<?= htmlspecialchars($search, ENT_QUOTES) ?>>
-	<input type="hidden" name="submitted" value="yes">
-	<input type="submit" value="Поиск">
+    <input type="text" name="search" value='<?= htmlspecialchars($search, ENT_QUOTES) ?>'>
+    <input type="hidden" name="submitted" value="yes">
+    <input type="submit" value="Поиск">
 </form>
 <br>
-<?php if($search!=""):?>
-<p><?=$searchText?></p>
+<?php
+if ($search != ""):
+?>
+<p><?= htmlspecialchars($searchText, ENT_QUOTES) ?></p>
 <a href="index.php">Показать всех</a>
-	<?php for($i=0; $i<$pages; $i++): ?>
-	<a href=<?= htmlspecialchars($currentPage)?>?num=<?= $i*$recordsPerPage?>&amp;order=<?= htmlspecialchars($sort, ENT_QUOTES) ?>&amp;direction=<?= htmlspecialchars($order, ENT_QUOTES) ?>&amp;search=<?=htmlspecialchars($search, ENT_QUOTES) ?>><?= $i+1 ?>   </a>
-	<?php endfor ?>
-	<?php else: ?>
-		<?php for($i=0; $i<$pages; $i++): ?>
-	<a href=<?= htmlspecialchars($currentPage)?>?num=<?= $i*$recordsPerPage?>&amp;order=<?= htmlspecialchars($sort, ENT_QUOTES) ?>&amp;direction=<?= htmlspecialchars($order, ENT_QUOTES) ?>><?= $i+1 ?>   </a>
-	<?php endfor ?>
-<?php endif ?>
+    <?php
+    for ($i = 0; $i < $pages; $i++):
+?>
+   <a href=<?= $searchLink ?>&amp;num=<?= $i * $recordsPerPage ?>><?= $i + 1 ?>   </a>
+    <?php
+    endfor;
+?>
+   <?php
+else:
+?>
+       <?php
+    for ($i = 0; $i < $pages; $i++):
+?>
+   <a href=<?= $link ?>&amp;num=<?= $i * $recordsPerPage ?>><?= $i + 1 ?>   </a>
+    <?php
+    endfor;
+?>
+<?php
+endif;
+?>
 <table>
-	<?php if(isset($_GET['search'])): ?>
-	<tr><th><a href='index.php?order=name&amp;direction=<?= $directionName?>&amp;num=0&amp;search=<?= htmlspecialchars($_GET['search'], ENT_QUOTES) ?>'><?= $nameArrow ?>Студент</a></th><th><a href='index.php?order=groupindex&amp;direction=
-		<?= $directionGroup ?>&amp;num=0&amp;search=<?= htmlspecialchars($_GET['search'], ENT_QUOTES) ?>'><?= $groupArrow ?>Номер группы</a>
-	</th><th><a href='index.php?order=points&amp;direction=<?= $directionPoints ?>&amp;num=0&amp;search=<?= htmlspecialchars($_GET['search'], ENT_QUOTES) ?>'><?= $pointsArrow ?>Баллы</a></th></tr>
+    <?php
+if ($search != ""):
+?>
+   <tr><th><a href='index.php?<?= $tableLink['name'] ?>&amp;search=<?= htmlspecialchars($_GET['search'], ENT_QUOTES) ?>'><?= $Arrow['name'] ?>Студент</a></th><th><a href='index.php?<?= $tableLink['groupindex'] ?>&amp;search=<?= htmlspecialchars($_GET['search'], ENT_QUOTES) ?>'><?= $Arrow['group'] ?>Номер группы</a>
+    </th><th><a href='index.php?<?= $tableLink['points'] ?>&amp;search=<?= htmlspecialchars($_GET['search'], ENT_QUOTES) ?>'><?= $Arrow['points'] ?>Баллы</a></th></tr>
 
-<?php else: ?>
-	<tr><th><a href='index.php?order=name&amp;direction=<?= $directionName?>&amp;num=0'><?= $nameArrow ?>Студент</a></th><th><a href='index.php?order=groupindex&amp;direction=
-		<?= $directionGroup ?>&amp;num=0'><?= $groupArrow ?>Номер группы</a>
-	</th><th><a href='index.php?order=points&amp;direction=<?= $directionPoints ?>&amp;num=0'><?= $pointsArrow ?>Баллы</a></th></tr>
-<?php endif; ?>
+<?php
+else:
+?>
+   <tr><th><a href='index.php?<?= $tableLink['name'] ?>'><?= $Arrow['name'] ?>Студент</a></th><th><a href='index.php?<?= $tableLink['groupindex'] ?>'><?= $Arrow['group'] ?>Номер группы</a>
+    </th><th><a href='index.php?<?= $tableLink['points'] ?>'><?= $Arrow['points'] ?>Баллы</a></th></tr>
+<?php
+endif;
+?>
 
-	
-	<?php foreach ($table as  $student): ?>
-		
-	<tr><td><?= htmlspecialchars($student->showName(), ENT_QUOTES)." ".htmlspecialchars($student->showSname(), ENT_QUOTES) ?></td><td><?= htmlspecialchars($student->showGroupIndex(), ENT_QUOTES) ?></td><td><?= htmlspecialchars($student->ShowPoints(), ENT_QUOTES) ?></td></tr>
-	
-	<?php endforeach ?>
+    
+    <?php
+foreach ($table as $student):
+?>
+       
+    <tr><td><?= htmlspecialchars($student->showName(), ENT_QUOTES) . " " . htmlspecialchars($student->showSname(), ENT_QUOTES) ?></td><td><?= htmlspecialchars($student->showGroupIndex(), ENT_QUOTES) ?></td><td><?= htmlspecialchars($student->ShowPoints(), ENT_QUOTES) ?></td></tr>
+    
+    <?php
+endforeach;
+?>
 	
 
 

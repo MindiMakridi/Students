@@ -28,12 +28,12 @@ if (isset($_POST['exit'])) {
 }
 
 
-$title       = "Студенты";
-$nameArrow   = "";
-$groupArrow  = "";
-$pointsArrow = "";
-$searchText  = "";
-$search      = "";
+$title           = "Студенты";
+$Arrow['name']   = "";
+$Arrow['group']  = "";
+$Arrow['points'] = "";
+$searchText      = "";
+$search          = "";
 
 $directionName   = "ASC";
 $directionGroup  = "ASC";
@@ -67,7 +67,7 @@ if (isset($_GET['order'])) {
     }
 }
 
-if($sort == 'points' && $order  == "DESC"){
+if ($sort == 'points' && $order == "DESC") {
     $directionPoints = "ASC";
 }
 
@@ -79,39 +79,35 @@ if ($order == 'ASC') {
 
 switch ($sort) {
     case 'name':
-        $nameArrow = $arrow;
+        $Arrow['name'] = $arrow;
         break;
     case 'groupindex':
-        $groupArrow = $arrow;
+        $Arrow['group'] = $arrow;
         break;
     case 'points':
-        $pointsArrow = $arrow;
+        $Arrow['points'] = $arrow;
         break;
         
 }
 
 
-if (isset($_GET['search']) && trim($_GET['search']!="")) {
-    $search     = $_GET['search'];
-    $pages = ceil($mapper->getSearchCount($search) / $recordsPerPage);
+if (isset($_GET['search']) && trim($_GET['search'] != "")) {
+    $search     = trim($_GET['search']);
+    $pages      = ceil($mapper->getSearchCount($search) / $recordsPerPage);
     $table      = $mapper->searchStudents($search, $num, $recordsPerPage, $sort, $order);
     $searchText = "Показываются только студенты, найденные по словам $search";
 } else {
     $table = $mapper->showStudents($sort, $order, $num, $recordsPerPage);
     
 }
-
+$link                    = htmlspecialchars($currentPage) . "?order=" . htmlspecialchars($sort, ENT_QUOTES) . "&amp;direction=" . htmlspecialchars($order, ENT_QUOTES);
+$searchLink              = htmlspecialchars($currentPage) . "?order=" . htmlspecialchars($sort, ENT_QUOTES) . "&amp;direction=" . htmlspecialchars($order, ENT_QUOTES) . "&amp;search=" . htmlspecialchars($search, ENT_QUOTES);
+$tableLink['name']       = "order=name&amp;direction=" . $directionName . "&amp;num=0";
+$tableLink['groupindex'] = "order=groupindex&amp;direction=" . $directionGroup . "&amp;num=0";
+$tableLink['points']     = "order=points&amp;direction=" . $directionPoints . "&amp;num=0";
 
 include "/templates/main.html";
 
 
 include "/templates/footer.html";
-
-
-
-
-
-
-
-
 
