@@ -10,6 +10,7 @@
 <body>
 <h2><a href='index.php' class="navigation">Список</a></h2> <h2><a href='profile.php' class="navigation"><?= htmlspecialchars($isRegistered, ENT_QUOTES) ?> </a></h2><br><br>
 <form method="post" action="<?= htmlspecialchars($currentPage, ENT_QUOTES) ?>">
+	<input type='hidden' name="<?=$token ?>">
 	<input type='hidden' name="exit" >
 	<input type='submit' value="Выход">
 </form>	

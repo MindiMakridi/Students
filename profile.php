@@ -4,7 +4,7 @@ require_once "/lib/functions.php";
 require_once "/lib/PDO.php";
 
 
-
+$token = null;
 $message = "";
 if (isset($_GET['msg'])) {
     $message = $_GET['msg'];
@@ -60,7 +60,7 @@ if (isset($_POST['submitted'])) {
 if (isset($_POST['submitted']) && $profile->checkErrors()) {
   
 
-    if (!getUserCode()) {
+    if (!getUserCode()&& $_POST['token']==$token) {
         $profile->generateCode();
         $mapper->addStudent($profile);
         $report = "Вы успешно зарегистрировались";

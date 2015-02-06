@@ -6,7 +6,7 @@ require_once "/lib/functions.php";
 require_once "/lib/PDO.php";
 
 
-
+$token = null;
 $mapper = new DataMapper($DBH);
 
 $pages = ceil($mapper->getLastId() / $recordsPerPage);
@@ -14,6 +14,7 @@ $pages = ceil($mapper->getLastId() / $recordsPerPage);
 
 if (getUserID()) {
     $isRegistered = getUserID();
+    $token = createXsrfCookie();
     
     
 } else {
@@ -21,7 +22,7 @@ if (getUserID()) {
     
 }
 
-if (isset($_POST['exit'])) {
+if (isset($_POST['exit'])&& $_POST['token']==$token) {
     logOut();
     header("Location: $currentPage");
     die;
