@@ -1,4 +1,5 @@
 <?php
+
 function  getUserId(){
 if(isset($_COOKIE['studentscookie']['name'])){
  $id = $_COOKIE['studentscookie']['name'];
@@ -50,12 +51,16 @@ function logOut(){
 }
 
 function createXsrfCookie() {
+    $currentPage = $_SERVER['PHP_SELF'];
     if(!(isset($_COOKIE['studentscookie']['token']))){
-        setcookie("studentscookie[token]", generateToken(), time()+60*60*3, "/");
+        $token = generateToken();
+        setcookie("studentscookie[token]", $token, time()+60*60*3, "/");
+        return $token;
     }
     else{
-        setcookie("studentscookie[token]", $_COOKIE["studentscookie"]['token'], time()+60*60*3, "/");
+      setcookie("studentscookie[token]", $_COOKIE["studentscookie"]['token'], time()+60*60*3, "/");
+       
     }
-    return $_COOKIE['studentscookie']['token'];
+    
 }
 ?>
