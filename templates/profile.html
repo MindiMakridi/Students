@@ -22,6 +22,7 @@
 
 
 Год рождения <input type="text" name="birthdate" value="<?= htmlspecialchars($profile->showBirthDate()) ?>"><font color="red"> <?= $profile->errors['birthdate']?></font>
+<input type='hidden' name='token' value='<?=$token ?>'>
 <input type='hidden' name='submitted' value='yes'>
 
 <input type='submit' value='<?= htmlspecialchars($value) ?>'>
