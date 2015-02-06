@@ -3,13 +3,7 @@ require_once "/lib/DataMapper.php";
 require_once "/lib/functions.php";
 require_once "/lib/PDO.php";
 
-if(isset($_COOKIE['studentscookie']['token'])){
 
-$token = $_COOKIE['studentscookie']['token'];
-}
-else{
-    setcookie("studentscookie[token]", generateToken(), time()+60*60*3, "/");
-}
 
 $message = "";
 if (isset($_GET['msg'])) {
@@ -29,7 +23,7 @@ if (getUserCode()) {
     $email        = getUserMail();
     $code         = getUserCode();
     $title        = getUserID();
-    
+    $token        = createXsrfCookie();
     
     if (!($profile = $mapper->fetchProfile($code))) {
         throw new Exception("Не удалось загрузить профиль");
@@ -71,6 +65,7 @@ if (isset($_POST['submitted']) && $profile->checkErrors()) {
         $mapper->addStudent($profile);
         $report = "Вы успешно зарегистрировались";
         setcookie("studentscookie[code]", $profile->showCode(), time() + (7 * 24 * 60 * 60 * 42), "/");
+        $token = createXsrfCookie();
         updateStudentCookie($profile->showName(), $profile->showEmail());
     } elseif($_POST['token']==$token) {
         $report = "Изменения сохранены";
@@ -78,7 +73,7 @@ if (isset($_POST['submitted']) && $profile->checkErrors()) {
         updateStudentCookie($profile->showName(), $profile->showEmail());
     }
     else {
-        $report = "Произошла ошибка";
+        $report = "Произошла ошибка, отправьте форму еще раз";
     }
     
     header("Location: http://students.ru/profile.php?msg=$report");
@@ -86,7 +81,7 @@ if (isset($_POST['submitted']) && $profile->checkErrors()) {
 }
 
 
-$token = $_COOKIE['studentscookie']['token'];
+
 include "/templates/header.html";
 include "/templates/profile.html";
 include "/templates/footer.html";

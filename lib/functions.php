@@ -49,5 +49,10 @@ function logOut(){
     setcookie('studentscookie[token]', "", time()-3600, '/');
 }
 
-
+function createXsrfCookie() {
+    if(!(isset($_COOKIE['studentscookie']['token']))){
+        setcookie("studentscookie[token]", generateToken(), time()+60*60*3, "/");
+    }
+    return $_COOKIE['studentscookie']['token'];
+}
 ?>
