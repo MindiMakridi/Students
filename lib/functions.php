@@ -51,7 +51,7 @@ function logOut(){
 }
 
 function createXsrfCookie() {
-    $currentPage = $_SERVER['PHP_SELF'];
+    
     if(!(isset($_COOKIE['studentscookie']['token']))){
         $token = generateToken();
         setcookie("studentscookie[token]", $token, time()+60*60*3, "/");
