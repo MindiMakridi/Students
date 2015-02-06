@@ -53,6 +53,9 @@ function createXsrfCookie() {
     if(!(isset($_COOKIE['studentscookie']['token']))){
         setcookie("studentscookie[token]", generateToken(), time()+60*60*3, "/");
     }
+    else{
+        setcookie("studentscookie[token]", $_COOKIE["studentscookie"]['token'], time()+60*60*3, "/");
+    }
     return $_COOKIE['studentscookie']['token'];
 }
 ?>
