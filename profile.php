@@ -4,13 +4,14 @@ require_once "/lib/functions.php";
 require_once "/lib/PDO.php";
 
 
-$token = null;
+$token        = createXsrfCookie();
 $message = "";
+
 if (isset($_GET['msg'])) {
     $message = $_GET['msg'];
 }
 $mapper = new DataMapper($DBH);
-if (isset($_POST['exit'])) {
+if (isset($_POST['exit'])&& $_POST['token']==$token) {
     logOut();
     header("Location: $currentPage");
 }
@@ -23,7 +24,7 @@ if (getUserCode()) {
     $email        = getUserMail();
     $code         = getUserCode();
     $title        = getUserID();
-    $token        = createXsrfCookie();
+    
     
     if (!($profile = $mapper->fetchProfile($code))) {
         throw new Exception("Не удалось загрузить профиль");
@@ -75,12 +76,16 @@ if (isset($_POST['submitted']) && $profile->checkErrors()) {
     else {
         $report = "Произошла ошибка, отправьте форму еще раз";
     }
-    
+    $report = urlencode($report);
     header("Location: http://students.ru/profile.php?msg=$report");
     die;
 }
 
-
+/*Внимание! костыль*/
+$reg = "/(Вы успешно зарегистрировались)|(Изменения сохранены)|(Произошла ошибка, отправьте форму еще раз)/ui";
+if(isset($_GET['msg'])&& !(preg_match($reg, $_GET['msg']))) {
+    die;
+}
 
 include "/templates/header.html";
 include "/templates/profile.html";

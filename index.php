@@ -92,7 +92,7 @@ switch ($sort) {
 }
 
 
-if (isset($_GET['search']) && trim($_GET['search'] != "")) {
+if (isset($_GET['search']) && trim($_GET['search'])!= "") {
     $search     = trim($_GET['search']);
     $pages      = ceil($mapper->getSearchCount($search) / $recordsPerPage);
     $table      = $mapper->searchStudents($search, $num, $recordsPerPage, $sort, $order);
@@ -101,8 +101,8 @@ if (isset($_GET['search']) && trim($_GET['search'] != "")) {
     $table = $mapper->showStudents($sort, $order, $num, $recordsPerPage);
     
 }
-$link                    = htmlspecialchars($currentPage) . "?order=" . htmlspecialchars($sort, ENT_QUOTES) . "&amp;direction=" . htmlspecialchars($order, ENT_QUOTES);
-$searchLink              = htmlspecialchars($currentPage) . "?order=" . htmlspecialchars($sort, ENT_QUOTES) . "&amp;direction=" . htmlspecialchars($order, ENT_QUOTES) . "&amp;search=" . htmlspecialchars($search, ENT_QUOTES);
+$link                    = htmlspecialchars($currentPage) . "?order=" . htmlspecialchars(urlencode($sort), ENT_QUOTES) . "&amp;direction=" . htmlspecialchars(urlencode($order), ENT_QUOTES);
+$searchLink              = htmlspecialchars(urlencode($currentPage)) . "?order=" . htmlspecialchars(urlencode($sort), ENT_QUOTES) . "&amp;direction=" . htmlspecialchars(urlencode($order), ENT_QUOTES) . "&amp;search=" . htmlspecialchars(urlencode($search), ENT_QUOTES);
 $tableLink['name']       = "order=name&amp;direction=" . $directionName . "&amp;num=0";
 $tableLink['groupindex'] = "order=groupindex&amp;direction=" . $directionGroup . "&amp;num=0";
 $tableLink['points']     = "order=points&amp;direction=" . $directionPoints . "&amp;num=0";
