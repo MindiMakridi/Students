@@ -6,9 +6,12 @@ require_once "/lib/PDO.php";
 
 $token        = createXsrfCookie();
 $message = "";
+$messages = array("saved" =>"Изменения сохранены",
+                 "registered" => "Вы успешно зарегистрировались",
+                   "error"=>"Произошла ошибка, отправьте форму еще раз");
 
 if (isset($_GET['msg'])) {
-    $message = $_GET['msg'];
+    $message = $messages[$_GET['msg']];
 }
 $mapper = new DataMapper($DBH);
 if (isset($_POST['exit'])&& $_POST['token']==$token) {
@@ -64,28 +67,24 @@ if (isset($_POST['submitted']) && $profile->checkErrors()) {
     if (!getUserCode()&& $_POST['token']==$token) {
         $profile->generateCode();
         $mapper->addStudent($profile);
-        $report = "Вы успешно зарегистрировались";
+        $report = "registered";
         setcookie("studentscookie[code]", $profile->showCode(), time() + (7 * 24 * 60 * 60 * 42), "/");
         $token = createXsrfCookie();
         updateStudentCookie($profile->showName(), $profile->showEmail());
     } elseif($_POST['token']==$token) {
-        $report = "Изменения сохранены";
+        $report = "saved";
         $mapper->editProfile($profile);
         updateStudentCookie($profile->showName(), $profile->showEmail());
     }
     else {
-        $report = "Произошла ошибка, отправьте форму еще раз";
+        $report = "error";
     }
     $report = urlencode($report);
     header("Location: http://students.ru/profile.php?msg=$report");
     die;
 }
 
-/*Внимание! костыль*/
-$reg = "/(Вы успешно зарегистрировались)|(Изменения сохранены)|(Произошла ошибка, отправьте форму еще раз)/ui";
-if(isset($_GET['msg'])&& !(preg_match($reg, $_GET['msg']))) {
-    die;
-}
+
 
 include "/templates/header.html";
 include "/templates/profile.html";
